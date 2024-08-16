@@ -4,7 +4,7 @@
     <li *ngFor="let reservation of reservations">
         Guest: {{reservation.guestName}}<br>
         Email: {{reservation.guestEmail}}<br>
-        Room No.: {{reservation.guestName}}<br>
+        Room No.: {{reservation.roomNumber}}<br>
         Check In Date: {{reservation.checkInDate}}<br>
         Check Out Date: {{reservation.checkOutDate}}<br>
         <button (click)="deleteReservation(reservation.id)">Delete</button>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReservationService } from '../reservation/reservation.service';
 import { Reservation } from '../models/reservation';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -18,6 +18,7 @@ export class ReservationFormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private reservationService: ReservationService,
     private router: Router,
+    private activatedRoute: ActivatedRoute
   ){
 
   }
@@ -30,12 +31,34 @@ export class ReservationFormComponent implements OnInit {
       guestEmail: ['', [Validators.required, Validators.email]],
       roomNumber: ['', Validators.required],
     });
+    // retrieves a reservation ID from the route parameters
+    let id = this.activatedRoute.snapshot.paramMap.get('id');
+
+    if(id) {
+      // retrieves the reservation from the service using the ID
+      let reservation = this.reservationService.getRerservation(id);
+
+      if(reservation){
+        // The patchValue method in Angular's FormGroup is used to update the values of specific controls in the form group.
+        this.reservationForm.patchValue(reservation);
+      }
+    }
   }
 
   onSubmit(){
     if(this.reservationForm.valid){
-      const reservation: Reservation = this.reservationForm.value;
-      this.reservationService.addReservation(reservation);
+      let reservation: Reservation = this.reservationForm.value;
+
+      // retrieves a reservation ID from the route parameters
+      let id = this.activatedRoute.snapshot.paramMap.get('id');
+
+      if(id) {
+        // Update
+        this.reservationService.updateReservation(id, reservation);
+      } else {
+        //new
+        this.reservationService.addReservation(reservation);
+      }
 
       this.router.navigate(['/list']);
     }
