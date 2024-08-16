@@ -19,4 +19,9 @@ export class ReservationListComponent implements OnInit{
     // load the reservations from the service and put them in the Reservation property
     this.reservations = this.reservationService.getReservations();
   }
+
+  deleteReservation(id: string){
+    // call the deleteReservation method from the service
+    this.reservationService.deleteReservation(id);
+  }
 }
