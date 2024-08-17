@@ -17,7 +17,10 @@ export class ReservationListComponent implements OnInit{
 
   ngOnInit(): void {
     // load the reservations from the service and put them in the Reservation property
-    this.reservations = this.reservationService.getReservations();
+    // subscribe to the observable returned by the getReservations method
+      this.reservationService.getReservations().subscribe(reservations => {
+        this.reservations = reservations
+    });
   }
 
   deleteReservation(id: string){
