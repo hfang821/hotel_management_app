@@ -25,6 +25,8 @@ export class ReservationListComponent implements OnInit{
 
   deleteReservation(id: string){
     // call the deleteReservation method from the service
-    this.reservationService.deleteReservation(id);
+    this.reservationService.deleteReservation(id).subscribe(() => {
+      console.log("Delete Request processed.")
+    })
   }
 }

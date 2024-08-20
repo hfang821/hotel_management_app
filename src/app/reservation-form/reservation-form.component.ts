@@ -35,8 +35,12 @@ export class ReservationFormComponent implements OnInit {
     let id = this.activatedRoute.snapshot.paramMap.get('id');
 
     if(id) {
-      // retrieves the reservation from the service using the ID
-      let reservation = this.reservationService.getRerservation(id);
+      // The getRerservation method in the ReservationService is used to retrieve a reservation by ID.
+      let reservation = this.reservationService.getRerservation(id).subscribe(reservation => {
+        if(reservation)
+          // The patchValue method in Angular's FormGroup is used to update the values of specific controls in the form group.
+          this.reservationForm.patchValue(reservation);
+      });
 
       if(reservation){
         // The patchValue method in Angular's FormGroup is used to update the values of specific controls in the form group.
@@ -54,10 +58,14 @@ export class ReservationFormComponent implements OnInit {
 
       if(id) {
         // Update
-        this.reservationService.updateReservation(id, reservation);
+        this.reservationService.updateReservation(id, reservation).subscribe(() => {
+          console.log("Update request processed.")
+        });
       } else {
         //new
-        this.reservationService.addReservation(reservation);
+        this.reservationService.addReservation(reservation).subscribe(()=>{
+          console.log("Creation request processed.")
+        })
       }
 
       this.router.navigate(['/list']);
